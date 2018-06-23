@@ -1,15 +1,13 @@
-import { _Creep } from './creep';
+import { Creep } from './creep';
 
-export class Harvester extends _Creep
+export class Harvester extends Creep._Creep
 {
     constructor()
     {
         super();
-        console.log("Created Harvester");
     }
 
     public tick(): void
     {  
-        console.log("Harvester");
     }
 }

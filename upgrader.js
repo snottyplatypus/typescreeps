@@ -11,13 +11,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var creep_1 = require("./creep");
-var Harvester = /** @class */ (function (_super) {
-    __extends(Harvester, _super);
-    function Harvester() {
+var Upgrader = /** @class */ (function (_super) {
+    __extends(Upgrader, _super);
+    function Upgrader() {
         return _super.call(this) || this;
     }
-    Harvester.prototype.tick = function () {
+    Upgrader.prototype.tick = function () {
     };
-    return Harvester;
+    return Upgrader;
 }(creep_1.Creep._Creep));
-exports.Harvester = Harvester;
+exports.Upgrader = Upgrader;
