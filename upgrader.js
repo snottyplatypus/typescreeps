@@ -13,8 +13,10 @@ exports.__esModule = true;
 var creep_1 = require("./creep");
 var Upgrader = /** @class */ (function (_super) {
     __extends(Upgrader, _super);
-    function Upgrader() {
-        return _super.call(this) || this;
+    function Upgrader(name) {
+        var _this = _super.call(this) || this;
+        _this.name = name;
+        return _this;
     }
     Upgrader.prototype.tick = function () {
     };

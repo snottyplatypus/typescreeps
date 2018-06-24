@@ -13,8 +13,10 @@ exports.__esModule = true;
 var creep_1 = require("./creep");
 var Harvester = /** @class */ (function (_super) {
     __extends(Harvester, _super);
-    function Harvester() {
-        return _super.call(this) || this;
+    function Harvester(name) {
+        var _this = _super.call(this) || this;
+        _this.name = name;
+        return _this;
     }
     Harvester.prototype.tick = function () {
     };
