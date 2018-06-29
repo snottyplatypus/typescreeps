@@ -1,14 +1,5 @@
-import { Creep } from './creep';
-
-export class Upgrader extends Creep._Creep
+export namespace Upgrader 
 {
-    constructor(name: string)
-    {
-        super();
-        this.name = name;
-    }
+    export var MAX_UPGRADERS = 1;
 
-    public tick(): void
-    {  
-    }
 }

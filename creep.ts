@@ -1,17 +1,43 @@
+import { U } from './utils';
+import { Harvester } from './harvester';
+
 export namespace Creep {
 
-    export var MAX_HARVESTERS = 2;
-    export var MAX_UPGRADERS = 1;
+    export var _roles = {} as U.Dictionary_f;
 
-    export var roles: Array<string> = [ 'harvester', 'upgrader'];
-
-    export class _Creep
+    export function init(): void
     {
-        public tick(): void {}
-
-        public name: string;
+        Harvester.init();
+        _roles['harvester'] = Harvester._harvester;
     }
 
+    export function free(): void
+    {
+        for(let name in Memory.creeps) {
+            if(!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                console.log('Clearing non-existing creep memory: ', name);
+            }
+        }
+    }
+
+    export function spawn(): void
+    {
+        for(let s_name in Game.spawns)
+        {
+            Harvester.spawn(s_name);
+        }
+    }
+
+    export function tick(): void
+    {
+        for(let name in Game.creeps)
+        {
+            let creep = Game.creeps[name];
+            _roles[creep.memory.role](creep);
+        }
+    }
+    /*
     export function add_creep<T>(creep_array: Array<T>, type: string, creep: T, body: any ): void
     {
         //each creep with have it's array pos as name 
@@ -34,5 +60,5 @@ export namespace Creep {
             });
         });
     }
-
+    */
 }

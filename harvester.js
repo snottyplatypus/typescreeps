@@ -1,25 +1,25 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 exports.__esModule = true;
-var creep_1 = require("./creep");
-var Harvester = /** @class */ (function (_super) {
-    __extends(Harvester, _super);
-    function Harvester(name) {
-        var _this = _super.call(this) || this;
-        _this.name = name;
-        return _this;
+var _ = require("lodash");
+var Harvester;
+(function (Harvester) {
+    // number of sources per room
+    var sources = {};
+    function init() {
+        for (var s_name in Game.spawns) {
+            sources[s_name] = Game.spawns[s_name].room.find(FIND_SOURCES);
+        }
     }
-    Harvester.prototype.tick = function () {
-    };
-    return Harvester;
-}(creep_1.Creep._Creep));
-exports.Harvester = Harvester;
+    Harvester.init = init;
+    function spawn(s_name) {
+        var n_harvesters = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvester'; }).length;
+        console.log('source: ' + s_name + ' length: ' + sources[s_name].length + ' n_har: ' + n_harvesters);
+        if (n_harvesters < sources[s_name].length) {
+            Game.spawns[s_name].spawnCreep([WORK, WORK, MOVE], 'harvester' + n_harvesters, { memory: { role: 'harvester' } });
+        }
+    }
+    Harvester.spawn = spawn;
+    function _harvester(creep) {
+    }
+    Harvester._harvester = _harvester;
+})(Harvester = exports.Harvester || (exports.Harvester = {}));
