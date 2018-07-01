@@ -10,7 +10,7 @@ var Harvester;
     // number of sources per room
     var sources = {};
     // possible tiers of harvester
-    var h_tier = [
+    var tier = [
         [WORK, WORK, WORK, WORK, WORK, MOVE],
         [WORK, WORK, MOVE]
     ];
@@ -22,7 +22,7 @@ var Harvester;
     Harvester.init = init;
     function spawn(s_name) {
         var n_harvesters = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvester'; }).length;
-        if (n_harvesters < sources[s_name].length) {
+        if (n_harvesters < 1 /*ources[s_name].length*/) {
             var t_1 = 0;
             sources[s_name].forEach(function (source) {
                 for (var name_1 in Game.creeps) {
@@ -32,8 +32,8 @@ var Harvester;
                 }
             });
             var target = sources[s_name][t_1].id;
-            for (var i = 0; i < h_tier.length; i++) {
-                if (Game.spawns[s_name].spawnCreep(h_tier[i], 'harvester' + n_harvesters, {
+            for (var i = 0; i < tier.length; i++) {
+                if (Game.spawns[s_name].spawnCreep(tier[i], 'harvester' + n_harvesters, {
                     memory: {
                         role: 'harvester',
                         state: 'spawning',
