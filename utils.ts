@@ -1,7 +1,7 @@
 export namespace U 
 {
     export interface Dictionary_f {
-        [index: string]: (arg1: any) => void;
+        [index: string]: (creep: Creep) => void;
     }
 
     export interface Dictionary_s {

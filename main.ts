@@ -4,11 +4,8 @@ import { Upgrader } from './upgrader';
 import { Traveler } from './Traveler';
 
 //TODO 
-//Harvester with work, carry
-//gatherer with carry, move
+//hauler with carry, move
 //upgrader same
-//CREEP TIERS, spawn the highest possible
-//creep state in memory
 
 Creep.init();
 

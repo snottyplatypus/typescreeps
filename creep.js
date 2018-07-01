@@ -6,7 +6,9 @@ var Creep;
     Creep._roles = {};
     function init() {
         harvester_1.Harvester.init();
-        Creep._roles['harvester'] = harvester_1.Harvester._harvester;
+        Creep._roles['harvester_spawning'] = harvester_1.Harvester._spawning;
+        Creep._roles['harvester_moving'] = harvester_1.Harvester._moving;
+        Creep._roles['harvester_harvesting'] = harvester_1.Harvester._harvesting;
     }
     Creep.init = init;
     function free() {
@@ -27,32 +29,8 @@ var Creep;
     function tick() {
         for (var name_2 in Game.creeps) {
             var creep = Game.creeps[name_2];
-            Creep._roles[creep.memory.role](creep);
+            Creep._roles[creep.memory.role + '_' + creep.memory.state](creep);
         }
     }
     Creep.tick = tick;
-    /*
-    export function add_creep<T>(creep_array: Array<T>, type: string, creep: T, body: any ): void
-    {
-        //each creep with have it's array pos as name
-        let name: string = type + creep_array.length;
-        let err:any = Game.spawns['Spawn1'].spawnCreep(body, name, { memory: {role: type} });
-        if(err == 0) {
-            console.log('Created ' + type);
-            creep_array.push(creep);
-        }
-        if(err == ERR_NOT_ENOUGH_ENERGY)
-            console.log('Not enough energy to create creep of type: ' + type);
-    }
-
-    export function delete_creep(creep_array: any, name: string){
-        delete Memory.creeps[name];
-        //we filter each array so it doesn't contain the deleted creep anymore
-        creep_array.array.forEach(element => {
-            element = element.filter(function(element){
-                return element.name !== name;
-            });
-        });
-    }
-    */
 })(Creep = exports.Creep || (exports.Creep = {}));
