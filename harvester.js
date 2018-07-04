@@ -11,39 +11,48 @@ var Harvester;
     var sources = {};
     // possible tiers of harvester
     var tier = [
+        [WORK, WORK, MOVE],
         [WORK, WORK, WORK, WORK, WORK, MOVE],
-        [WORK, WORK, MOVE]
     ];
     function init() {
-        for (var s_name in Game.spawns) {
-            sources[s_name] = Game.spawns[s_name].room.find(FIND_SOURCES);
+        for (var r_name in Game.rooms) {
+            sources[r_name] = Game.rooms[r_name].find(FIND_SOURCES);
         }
     }
     Harvester.init = init;
-    function spawn(s_name) {
+    function spawn(s_name, t, max) {
+        var n_sources = 0;
+        for (var r_name in sources) {
+            n_sources += sources[r_name].length;
+        }
+        var max_h;
+        if (max)
+            max_h = max;
+        else
+            max_h = n_sources;
         var n_harvesters = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvester'; }).length;
-        if (n_harvesters < 1 /*ources[s_name].length*/) {
-            var t_1 = 0;
-            sources[s_name].forEach(function (source) {
-                for (var name_1 in Game.creeps) {
-                    var creep = Game.creeps[name_1];
-                    if (creep.memory.role == 'harvester' && creep.memory.sourceId == source.id)
-                        ++t_1;
+        if (n_harvesters < max_h) {
+            var s = 0;
+            for (var r_name_1 in Game.rooms) {
+                do {
+                    for (var name_1 in Game.creeps) {
+                        var creep = Game.creeps[name_1];
+                        var not_available = (creep.memory.role == 'harvester' && creep.memory.sourceId == sources[r_name_1][s].id);
+                        if (not_available)
+                            ++s;
+                    }
+                } while (not_available);
+            }
+            var r_name = Game.spawns[s_name].room.name;
+            var target = sources[r_name][s].id;
+            Game.spawns[s_name].spawnCreep(tier[t], 'harvester' + n_harvesters, {
+                memory: {
+                    role: 'harvester',
+                    state: 'spawning',
+                    spawn: s_name,
+                    sourceId: target
                 }
             });
-            var target = sources[s_name][t_1].id;
-            for (var i = 0; i < tier.length; i++) {
-                if (Game.spawns[s_name].spawnCreep(tier[i], 'harvester' + n_harvesters, {
-                    memory: {
-                        role: 'harvester',
-                        state: 'spawning',
-                        spawn: s_name,
-                        sourceId: target
-                    }
-                }) == OK) {
-                    break;
-                }
-            }
         }
     }
     Harvester.spawn = spawn;

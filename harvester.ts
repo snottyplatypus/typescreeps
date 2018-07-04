@@ -14,45 +14,54 @@ export namespace Harvester
     // possible tiers of harvester
     var tier = 
     [
+        [WORK, WORK, MOVE],
         [WORK, WORK, WORK, WORK, WORK, MOVE],
-        [WORK, WORK, MOVE]
     ]
     
     export function init(): void
     {
-        for(let s_name in Game.spawns) {
-            sources[s_name] = Game.spawns[s_name].room.find(FIND_SOURCES);
+        for(let r_name in Game.rooms) {
+            sources[r_name] = Game.rooms[r_name].find(FIND_SOURCES);
         }
     }
-
-    export function spawn(s_name: string): void
+  
+    export function spawn(s_name: string, t: number, max?: number): void
     {
+        var n_sources: number = 0;
+        for(let r_name in sources) {
+            n_sources += sources[r_name].length;
+        }
+    
+        var max_h;
+        if(max)
+            max_h = max;
+        else
+            max_h = n_sources;
         var n_harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length;
-        if(n_harvesters < 1/*ources[s_name].length*/) {
-            let t: number = 0;
-            sources[s_name].forEach(source => {
-                for(let name in Game.creeps) {
-                    let creep = Game.creeps[name];
-                    if(creep.memory.role == 'harvester' && creep.memory.sourceId == source.id)
-                        ++t;
-                }
-            });
-            let target: string = sources[s_name][t].id;
-            for(let i = 0; i < tier.length; i++) {
-                if(Game.spawns[s_name].spawnCreep(tier[i], 'harvester' + n_harvesters, 
-                    { 
-                        memory: 
-                        {
-                            role: 'harvester', 
-                            state: 'spawning',
-                            spawn: s_name, 
-                            sourceId: target
-                        } 
-                    }) == OK)
-                {
-                    break;
-                }
+        if(n_harvesters < max_h) {
+            let s: number = 0;
+            for(let r_name in Game.rooms) {
+                do {
+                    for(let name in Game.creeps) {
+                        let creep = Game.creeps[name];
+                        var not_available: boolean = (creep.memory.role == 'harvester' && creep.memory.sourceId == sources[r_name][s].id);
+                        if(not_available)
+                            ++s;
+                    }
+                } while(not_available);
             }
+            let r_name: string = Game.spawns[s_name].room.name;
+            let target: string = sources[r_name][s].id;
+            Game.spawns[s_name].spawnCreep(tier[t], 'harvester' + n_harvesters, 
+            { 
+                memory: 
+                {
+                    role: 'harvester', 
+                    state: 'spawning',
+                    spawn: s_name, 
+                    sourceId: target
+                } 
+            });
         }
     }
 

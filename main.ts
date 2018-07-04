@@ -6,8 +6,7 @@ declare var module: any;
 module.exports.loop = function()
 {
     Creep.free();
-
     Creep.spawn();
-    
     Creep.tick();
+
 }   

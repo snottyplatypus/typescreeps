@@ -4,9 +4,9 @@ import { Traveler } from './Traveler';
 
 var tier = 
     [
-        [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        [CARRY, CARRY, MOVE],
         [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
-        [CARRY, CARRY, MOVE]
+        [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
     ]
 
 export namespace Hauler
@@ -17,26 +17,22 @@ export namespace Hauler
     {
     }
 
-    export function spawn(s_name: string): void
+    export function spawn(s_name: string, t: number, max = MAX_HAULERS): void
     {
         var n_haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length;
-        if(n_haulers < MAX_HAULERS) {
-            for(let i = 0; i < tier.length; i++) {
-                if(Game.spawns[s_name].spawnCreep(tier[i], 'hauler' + n_haulers, 
-                    { 
-                        memory: 
-                        {
-                            role: 'hauler', 
-                            state: 'spawning',
-                            spawn: s_name, 
-                            targetId: ''
-                        } 
-                    }) == OK)
+
+        if(n_haulers < max) {
+            Game.spawns[s_name].spawnCreep(tier[t], 'hauler' + n_haulers, 
+            { 
+                memory: 
                 {
-                    break;
-                }
-            }
-        }
+                    role: 'hauler', 
+                    state: 'spawning',
+                    spawn: s_name, 
+                    targetId: ''
+                } 
+            });
+        }   
     }
 
     export function _spawning(creep: Creep): void

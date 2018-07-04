@@ -1,13 +1,15 @@
 import { U } from './utils';
 import { Harvester } from './harvester';
 import { Hauler } from './hauler';
+import { Spawn } from './spawn';
 
 export namespace Creep {
 
-    export var _roles = {} as U.Dictionary_f;
+    export var _roles = {} as U.Dictionary_c;
 
     export function init(): void
     {
+        Spawn.init();
         Harvester.init();
         _roles['harvester_spawning'] = Harvester._spawning;
         _roles['harvester_moving'] = Harvester._moving;
@@ -33,8 +35,9 @@ export namespace Creep {
     {
         for(let s_name in Game.spawns)
         {
-            Harvester.spawn(s_name);
-            Hauler.spawn(s_name);
+            //if(!Game.spawns[s_name].memory.state)
+            //    Game.spawns[s_name].memory.state = '';
+            Spawn.spawn(s_name);
         }
     }
 

@@ -2,10 +2,12 @@
 exports.__esModule = true;
 var harvester_1 = require("./harvester");
 var hauler_1 = require("./hauler");
+var spawn_1 = require("./spawn");
 var Creep;
 (function (Creep) {
     Creep._roles = {};
     function init() {
+        spawn_1.Spawn.init();
         harvester_1.Harvester.init();
         Creep._roles['harvester_spawning'] = harvester_1.Harvester._spawning;
         Creep._roles['harvester_moving'] = harvester_1.Harvester._moving;
@@ -28,8 +30,9 @@ var Creep;
     Creep.free = free;
     function spawn() {
         for (var s_name in Game.spawns) {
-            harvester_1.Harvester.spawn(s_name);
-            hauler_1.Hauler.spawn(s_name);
+            //if(!Game.spawns[s_name].memory.state)
+            //    Game.spawns[s_name].memory.state = '';
+            spawn_1.Spawn.spawn(s_name);
         }
     }
     Creep.spawn = spawn;

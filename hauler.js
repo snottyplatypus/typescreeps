@@ -2,9 +2,9 @@
 exports.__esModule = true;
 var _ = require("lodash");
 var tier = [
-    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    [CARRY, CARRY, MOVE],
     [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
-    [CARRY, CARRY, MOVE]
+    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
 ];
 var Hauler;
 (function (Hauler) {
@@ -12,21 +12,22 @@ var Hauler;
     function init() {
     }
     Hauler.init = init;
-    function spawn(s_name) {
+    function spawn(s_name, t, max) {
         var n_haulers = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length;
-        if (n_haulers < Hauler.MAX_HAULERS) {
-            for (var i = 0; i < tier.length; i++) {
-                if (Game.spawns[s_name].spawnCreep(tier[i], 'hauler' + n_haulers, {
-                    memory: {
-                        role: 'hauler',
-                        state: 'spawning',
-                        spawn: s_name,
-                        targetId: ''
-                    }
-                }) == OK) {
-                    break;
+        var max_h;
+        if (max)
+            max_h = max;
+        else
+            max_h = Hauler.MAX_HAULERS;
+        if (n_haulers < max_h) {
+            Game.spawns[s_name].spawnCreep(tier[t], 'hauler' + n_haulers, {
+                memory: {
+                    role: 'hauler',
+                    state: 'spawning',
+                    spawn: s_name,
+                    targetId: ''
                 }
-            }
+            });
         }
     }
     Hauler.spawn = spawn;
