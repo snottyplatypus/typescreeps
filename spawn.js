@@ -36,7 +36,6 @@ var Spawn;
         for (var i = 0; i < extensions.length; i++)
             max_energy += extensions[i].energyCapacity;
         max_energy += spawn.energyCapacity;
-        console.log(max_energy);
         if (max_energy > 600)
             spawn.memory.state = "prod";
     }
