@@ -66,7 +66,6 @@ export namespace Hauler
 
     export function _hauling(creep: Creep): void
     {
-        var s_name: string = creep.memory.spawn;
         var targets: any = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION ||

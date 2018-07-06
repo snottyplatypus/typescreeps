@@ -2,6 +2,7 @@ import { U } from './utils';
 import * as _ from "lodash";
 import { Harvester } from './harvester';
 import { Hauler } from './hauler';
+import { Upgrader } from './upgrader';
 
 export namespace Spawn
 {
@@ -23,15 +24,31 @@ export namespace Spawn
 
     export function _launch(s_name: string): void
     {
-        if( _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length > 1)
+        var spawn = Game.spawns[s_name];
+        if( _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length >= 1)
             Hauler.spawn(s_name, 0, 2);
         Harvester.spawn(s_name, 0, 2);
+        if( _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length >= 2)
+            Upgrader.spawn(s_name, 0);
+        var max_energy = 0;
+        var extensions: any = spawn.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION);
+            }
+        });
+        for(let i = 0; i < extensions.length; i++)
+            max_energy += extensions[i].energyCapacity;
+        max_energy += spawn.energyCapacity;
+        console.log(max_energy);
+        if(max_energy > 600)
+            spawn.memory.state = "prod";
     }
 
     export function _prod(s_name: string): void
     {
         Hauler.spawn(s_name, 2);
         Harvester.spawn(s_name, 1);
+        Upgrader.spawn(s_name, 0);
     }
 
     export function _army(s_name: string): void

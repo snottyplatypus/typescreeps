@@ -13,13 +13,9 @@ var Hauler;
     }
     Hauler.init = init;
     function spawn(s_name, t, max) {
+        if (max === void 0) { max = Hauler.MAX_HAULERS; }
         var n_haulers = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length;
-        var max_h;
-        if (max)
-            max_h = max;
-        else
-            max_h = Hauler.MAX_HAULERS;
-        if (n_haulers < max_h) {
+        if (n_haulers < max) {
             Game.spawns[s_name].spawnCreep(tier[t], 'hauler' + n_haulers, {
                 memory: {
                     role: 'hauler',
@@ -57,7 +53,6 @@ var Hauler;
     }
     Hauler._moving = _moving;
     function _hauling(creep) {
-        var s_name = creep.memory.spawn;
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: function (structure) {
                 return (structure.structureType == STRUCTURE_EXTENSION ||

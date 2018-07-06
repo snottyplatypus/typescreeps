@@ -2,6 +2,7 @@
 exports.__esModule = true;
 var harvester_1 = require("./harvester");
 var hauler_1 = require("./hauler");
+var upgrader_1 = require("./upgrader");
 var spawn_1 = require("./spawn");
 var Creep;
 (function (Creep) {
@@ -17,6 +18,10 @@ var Creep;
         Creep._roles['hauler_finding'] = hauler_1.Hauler._finding;
         Creep._roles['hauler_moving'] = hauler_1.Hauler._moving;
         Creep._roles['hauler_hauling'] = hauler_1.Hauler._hauling;
+        upgrader_1.Upgrader.init();
+        Creep._roles['upgrader_spawning'] = upgrader_1.Upgrader._spawning;
+        Creep._roles['upgrader_gathering'] = upgrader_1.Upgrader._gathering;
+        Creep._roles['upgrader_hauling'] = upgrader_1.Upgrader._hauling;
     }
     Creep.init = init;
     function free() {
@@ -30,8 +35,8 @@ var Creep;
     Creep.free = free;
     function spawn() {
         for (var s_name in Game.spawns) {
-            //if(!Game.spawns[s_name].memory.state)
-            //    Game.spawns[s_name].memory.state = '';
+            if (!Game.spawns[s_name].memory.state)
+                Game.spawns[s_name].memory.state = 'launch';
             spawn_1.Spawn.spawn(s_name);
         }
     }

@@ -1,6 +1,7 @@
 import { U } from './utils';
 import { Harvester } from './harvester';
 import { Hauler } from './hauler';
+import { Upgrader } from './upgrader';
 import { Spawn } from './spawn';
 
 export namespace Creep {
@@ -19,6 +20,10 @@ export namespace Creep {
         _roles['hauler_finding'] = Hauler._finding;
         _roles['hauler_moving'] = Hauler._moving;
         _roles['hauler_hauling'] = Hauler._hauling;
+        Upgrader.init();
+        _roles['upgrader_spawning'] = Upgrader._spawning;
+        _roles['upgrader_gathering'] = Upgrader._gathering;
+        _roles['upgrader_hauling'] = Upgrader._hauling;
     }
 
     export function free(): void
@@ -35,8 +40,8 @@ export namespace Creep {
     {
         for(let s_name in Game.spawns)
         {
-            //if(!Game.spawns[s_name].memory.state)
-            //    Game.spawns[s_name].memory.state = '';
+            if(!Game.spawns[s_name].memory.state)
+                Game.spawns[s_name].memory.state = 'launch';
             Spawn.spawn(s_name);
         }
     }
