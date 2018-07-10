@@ -44,9 +44,11 @@ export namespace Harvester
                 do {
                     for(let name in Game.creeps) {
                         let creep = Game.creeps[name];
-                        var not_available: boolean = (creep.memory.role == 'harvester' && creep.memory.sourceId == sources[r_name][s].id);
-                        if(not_available)
-                            ++s;
+                        if(creep.memory.role == 'harvester') {
+                            var not_available: boolean = (creep.memory.sourceId == sources[r_name][s].id);
+                            if(not_available)
+                                ++s;
+                        }
                     }
                 } while(not_available);
             }
@@ -81,7 +83,6 @@ export namespace Harvester
             creep.travelTo(source, { movingTarget: false });
         else {
             creep.memory.state = 'harvesting';
-            _harvesting(creep);
         }
     }
 

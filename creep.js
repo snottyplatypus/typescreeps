@@ -3,6 +3,7 @@ exports.__esModule = true;
 var harvester_1 = require("./harvester");
 var hauler_1 = require("./hauler");
 var upgrader_1 = require("./upgrader");
+var builder_1 = require("./builder");
 var spawn_1 = require("./spawn");
 var Creep;
 (function (Creep) {
@@ -22,6 +23,11 @@ var Creep;
         Creep._roles['upgrader_spawning'] = upgrader_1.Upgrader._spawning;
         Creep._roles['upgrader_gathering'] = upgrader_1.Upgrader._gathering;
         Creep._roles['upgrader_hauling'] = upgrader_1.Upgrader._hauling;
+        builder_1.Builder.init();
+        Creep._roles['builder_spawning'] = builder_1.Builder._spawning;
+        Creep._roles['builder_finding'] = builder_1.Builder._finding;
+        Creep._roles['builder_gathering'] = builder_1.Builder._gathering;
+        Creep._roles['builder_hauling'] = builder_1.Builder._hauling;
     }
     Creep.init = init;
     function free() {

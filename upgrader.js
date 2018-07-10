@@ -7,7 +7,7 @@ var tier = [
 ];
 var Upgrader;
 (function (Upgrader) {
-    Upgrader.MAX_UPGRADERS = 1;
+    Upgrader.MAX_UPGRADERS = 2;
     function init() {
     }
     Upgrader.init = init;
@@ -41,8 +41,8 @@ var Upgrader;
         if (targets.length == 0) {
             targets = creep.room.find(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    return structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_EXTENSION;
+                    return structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN;
                 }
             });
         }

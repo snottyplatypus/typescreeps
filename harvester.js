@@ -37,9 +37,11 @@ var Harvester;
                 do {
                     for (var name_1 in Game.creeps) {
                         var creep = Game.creeps[name_1];
-                        var not_available = (creep.memory.role == 'harvester' && creep.memory.sourceId == sources[r_name_1][s].id);
-                        if (not_available)
-                            ++s;
+                        if (creep.memory.role == 'harvester') {
+                            var not_available = (creep.memory.sourceId == sources[r_name_1][s].id);
+                            if (not_available)
+                                ++s;
+                        }
                     }
                 } while (not_available);
             }
@@ -69,7 +71,6 @@ var Harvester;
             creep.travelTo(source, { movingTarget: false });
         else {
             creep.memory.state = 'harvesting';
-            _harvesting(creep);
         }
     }
     Harvester._moving = _moving;

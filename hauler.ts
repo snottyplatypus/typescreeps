@@ -2,16 +2,15 @@ import { U } from './utils';
 import * as _ from "lodash";
 import { Traveler } from './Traveler';
 
-var tier = 
+export namespace Hauler
+{
+    export var MAX_HAULERS = 3;
+    var tier = 
     [
         [CARRY, CARRY, MOVE],
         [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
     ]
-
-export namespace Hauler
-{
-    export var MAX_HAULERS = 3;
 
     export function init(): void
     {
@@ -46,21 +45,46 @@ export namespace Hauler
 
     export function _finding(creep: Creep): void
     {
-        var resources = creep.room.find(FIND_DROPPED_RESOURCES);
-        var target: any = _.max(resources, 'amount');
-        creep.memory.targetId = target.id;
-        creep.memory.state = 'moving';
-        _moving(creep);
+        creep.memory.targetId = '';
+        var n_haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length;
+        var resources: any = creep.room.find(FIND_DROPPED_RESOURCES);
+        _.sortBy(resources, 'amount').reverse();
+        var target: any;
+        if(resources.length >= n_haulers) {
+            let t: number = 0;
+            do {
+                for(let name in Game.creeps) {
+                    let creep = Game.creeps[name];
+                    if(creep.memory.role == 'hauler') {
+                        var not_available: boolean = (creep.memory.targetId == resources[t].id);
+                        if(not_available)
+                            ++t;
+                    }
+                }
+            } while(not_available && t < resources.length);
+            target = resources[t];
+        } else {
+            target = _.max(resources, 'amount');
+        }
+
+        if(target) {
+            creep.memory.targetId = target.id;
+            creep.memory.state = 'moving';
+            _moving(creep);
+        }
     }
 
     export function _moving(creep: Creep): void
     {
         var target: any = Game.getObjectById(creep.memory.targetId);
+        if(target == null) {
+            creep.memory.state = 'finding';
+            return;
+        }
         if(creep.pickup(target) == ERR_NOT_IN_RANGE)
             creep.travelTo(target, { movingTarget: false });
         else {
             creep.memory.state = 'hauling';
-            _hauling(creep);
         }
     }
 
@@ -77,7 +101,7 @@ export namespace Hauler
         if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.travelTo(targets[0], { movingTarget: false });
         }
-
+        
         if(creep.carry.energy == 0)
             creep.memory.state = 'finding';
     }

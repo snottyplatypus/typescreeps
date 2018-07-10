@@ -2,41 +2,51 @@ import { U } from './utils';
 import * as _ from "lodash";
 import { Traveler } from './Traveler';
 
-var tier =
+export namespace Builder
+{
+    export var MAX_BUILDERS = 3;
+    var tier =
     [
         [WORK, CARRY, MOVE, MOVE],
-        [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE]
+        [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
     ]
-
-export namespace Upgrader 
-{
-    export var MAX_UPGRADERS = 2;
 
     export function init(): void
     {
     }
 
-    export function spawn(s_name: string, t: number, max = MAX_UPGRADERS)
+    export function spawn(s_name: string, t: number, max = MAX_BUILDERS): void
     {
-        var n_upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader').length;
+        var n_builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder').length;
 
-        if(n_upgraders < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'upgrader' + n_upgraders, 
+        if(n_builders < max) {
+            Game.spawns[s_name].spawnCreep(tier[t], 'builder' + n_builders, 
             { 
                 memory: 
                 {
-                    role: 'upgrader', 
+                    role: 'builder', 
                     state: 'spawning',
                     spawn: s_name, 
+                    targetId: ''
                 } 
             });
-        }  
+        }   
     }
 
     export function _spawning(creep: Creep): void
     {
         if(!creep.spawning)
         {
+            creep.memory.state = 'finding';
+            _finding(creep);
+        }
+    }
+
+    export function _finding(creep: Creep): void
+    {
+        var targets: any = creep.room.find(FIND_CONSTRUCTION_SITES);
+        if(targets.length > 0) {
+            creep.memory.targetId = targets[0].id;
             creep.memory.state = 'gathering';
             _gathering(creep);
         }
@@ -67,9 +77,17 @@ export namespace Upgrader
 
     export function _hauling(creep: Creep): void
     {
-        if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE)
-            creep.travelTo(creep.room.controller, { movingTarget: false });
-        if(creep.carry.energy == 0)
+        var target: any = Game.getObjectById(creep.memory.targetId);
+        if(target == null) {
+            creep.memory.state = 'finding';
+            return;
+        }
+        if(creep.build(target) == ERR_NOT_IN_RANGE)
+            creep.travelTo(target, { movingTarget: false });
+        if(target.progress == target.progressTotal)
+            creep.memory.state = 'finding';
+        else if(creep.carry.energy == 0)
             creep.memory.state = 'gathering';
     }
+
 }

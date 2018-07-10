@@ -2,6 +2,7 @@ import { U } from './utils';
 import { Harvester } from './harvester';
 import { Hauler } from './hauler';
 import { Upgrader } from './upgrader';
+import { Builder } from './builder';
 import { Spawn } from './spawn';
 
 export namespace Creep {
@@ -24,6 +25,11 @@ export namespace Creep {
         _roles['upgrader_spawning'] = Upgrader._spawning;
         _roles['upgrader_gathering'] = Upgrader._gathering;
         _roles['upgrader_hauling'] = Upgrader._hauling;
+        Builder.init();
+        _roles['builder_spawning'] = Builder._spawning;
+        _roles['builder_finding'] = Builder._finding;
+        _roles['builder_gathering'] = Builder._gathering;
+        _roles['builder_hauling'] = Builder._hauling;
     }
 
     export function free(): void

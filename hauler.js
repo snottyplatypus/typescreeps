@@ -1,14 +1,14 @@
 "use strict";
 exports.__esModule = true;
 var _ = require("lodash");
-var tier = [
-    [CARRY, CARRY, MOVE],
-    [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
-    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-];
 var Hauler;
 (function (Hauler) {
     Hauler.MAX_HAULERS = 3;
+    var tier = [
+        [CARRY, CARRY, MOVE],
+        [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    ];
     function init() {
     }
     Hauler.init = init;
@@ -35,20 +35,45 @@ var Hauler;
     }
     Hauler._spawning = _spawning;
     function _finding(creep) {
+        creep.memory.targetId = '';
+        var n_haulers = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length;
         var resources = creep.room.find(FIND_DROPPED_RESOURCES);
-        var target = _.max(resources, 'amount');
-        creep.memory.targetId = target.id;
-        creep.memory.state = 'moving';
-        _moving(creep);
+        _.sortBy(resources, 'amount').reverse();
+        var target;
+        if (resources.length >= n_haulers) {
+            var t = 0;
+            do {
+                for (var name_1 in Game.creeps) {
+                    var creep_1 = Game.creeps[name_1];
+                    if (creep_1.memory.role == 'hauler') {
+                        var not_available = (creep_1.memory.targetId == resources[t].id);
+                        if (not_available)
+                            ++t;
+                    }
+                }
+            } while (not_available && t < resources.length);
+            target = resources[t];
+        }
+        else {
+            target = _.max(resources, 'amount');
+        }
+        if (target) {
+            creep.memory.targetId = target.id;
+            creep.memory.state = 'moving';
+            _moving(creep);
+        }
     }
     Hauler._finding = _finding;
     function _moving(creep) {
         var target = Game.getObjectById(creep.memory.targetId);
+        if (target == null) {
+            creep.memory.state = 'finding';
+            return;
+        }
         if (creep.pickup(target) == ERR_NOT_IN_RANGE)
             creep.travelTo(target, { movingTarget: false });
         else {
             creep.memory.state = 'hauling';
-            _hauling(creep);
         }
     }
     Hauler._moving = _moving;

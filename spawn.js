@@ -5,6 +5,7 @@ var _ = require("lodash");
 var harvester_1 = require("./harvester");
 var hauler_1 = require("./hauler");
 var upgrader_1 = require("./upgrader");
+var builder_1 = require("./builder");
 var Spawn;
 (function (Spawn) {
     Spawn._state = {};
@@ -26,7 +27,9 @@ var Spawn;
             hauler_1.Hauler.spawn(s_name, 0, 2);
         harvester_1.Harvester.spawn(s_name, 0, 2);
         if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length >= 2)
-            upgrader_1.Upgrader.spawn(s_name, 0);
+            upgrader_1.Upgrader.spawn(s_name, 0, 1);
+        if (spawn.room.controller.level >= 2)
+            builder_1.Builder.spawn(s_name, 0, 2);
         var max_energy = 0;
         var extensions = spawn.room.find(FIND_STRUCTURES, {
             filter: function (structure) {
@@ -36,13 +39,14 @@ var Spawn;
         for (var i = 0; i < extensions.length; i++)
             max_energy += extensions[i].energyCapacity;
         max_energy += spawn.energyCapacity;
-        if (max_energy > 600)
+        if (max_energy > 550) //Spawn + 5 extensions capacity
             spawn.memory.state = "prod";
     }
     Spawn._launch = _launch;
     function _prod(s_name) {
         hauler_1.Hauler.spawn(s_name, 2);
         harvester_1.Harvester.spawn(s_name, 1);
+        builder_1.Builder.spawn(s_name, 1);
         upgrader_1.Upgrader.spawn(s_name, 0);
     }
     Spawn._prod = _prod;

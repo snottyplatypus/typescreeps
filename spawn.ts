@@ -3,6 +3,7 @@ import * as _ from "lodash";
 import { Harvester } from './harvester';
 import { Hauler } from './hauler';
 import { Upgrader } from './upgrader';
+import {Builder } from './builder';
 
 export namespace Spawn
 {
@@ -29,7 +30,9 @@ export namespace Spawn
             Hauler.spawn(s_name, 0, 2);
         Harvester.spawn(s_name, 0, 2);
         if( _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length >= 2)
-            Upgrader.spawn(s_name, 0);
+            Upgrader.spawn(s_name, 0, 1);
+        if(spawn.room.controller.level >= 2)
+            Builder.spawn(s_name, 0, 2);
         var max_energy = 0;
         var extensions: any = spawn.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -39,7 +42,7 @@ export namespace Spawn
         for(let i = 0; i < extensions.length; i++)
             max_energy += extensions[i].energyCapacity;
         max_energy += spawn.energyCapacity;
-        if(max_energy > 600)
+        if(max_energy > 550) //Spawn + 5 extensions capacity
             spawn.memory.state = "prod";
     }
 
@@ -47,6 +50,7 @@ export namespace Spawn
     {
         Hauler.spawn(s_name, 2);
         Harvester.spawn(s_name, 1);
+        Builder.spawn(s_name, 1);
         Upgrader.spawn(s_name, 0);
     }
 
