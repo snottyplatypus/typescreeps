@@ -54,7 +54,7 @@ export namespace Harvester
             }
             let r_name: string = Game.spawns[s_name].room.name;
             let target: string = sources[r_name][s].id;
-            Game.spawns[s_name].spawnCreep(tier[t], 'harvester' + n_harvesters, 
+            Game.spawns[s_name].spawnCreep(tier[t], 'harvester_' + Game.time.toString(), 
             { 
                 memory: 
                 {

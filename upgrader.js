@@ -15,7 +15,7 @@ var Upgrader;
         if (max === void 0) { max = Upgrader.MAX_UPGRADERS; }
         var n_upgraders = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'upgrader'; }).length;
         if (n_upgraders < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'upgrader' + n_upgraders, {
+            Game.spawns[s_name].spawnCreep(tier[t], 'upgrader_' + Game.time.toString(), {
                 memory: {
                     role: 'upgrader',
                     state: 'spawning',

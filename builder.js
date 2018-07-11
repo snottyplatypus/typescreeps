@@ -15,7 +15,7 @@ var Builder;
         if (max === void 0) { max = Builder.MAX_BUILDERS; }
         var n_builders = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'builder'; }).length;
         if (n_builders < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'builder' + n_builders, {
+            Game.spawns[s_name].spawnCreep(tier[t], 'builder_' + Game.time.toString(), {
                 memory: {
                     role: 'builder',
                     state: 'spawning',

@@ -16,7 +16,7 @@ var Hauler;
         if (max === void 0) { max = Hauler.MAX_HAULERS; }
         var n_haulers = _.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length;
         if (n_haulers < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'hauler' + n_haulers, {
+            Game.spawns[s_name].spawnCreep(tier[t], 'hauler_' + Game.time.toString(), {
                 memory: {
                     role: 'hauler',
                     state: 'spawning',

@@ -47,7 +47,7 @@ var Harvester;
             }
             var r_name = Game.spawns[s_name].room.name;
             var target = sources[r_name][s].id;
-            Game.spawns[s_name].spawnCreep(tier[t], 'harvester' + n_harvesters, {
+            Game.spawns[s_name].spawnCreep(tier[t], 'harvester_' + Game.time.toString(), {
                 memory: {
                     role: 'harvester',
                     state: 'spawning',

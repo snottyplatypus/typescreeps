@@ -32,7 +32,7 @@ export namespace Spawn
         if( _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length >= 2)
             Upgrader.spawn(s_name, 0, 1);
         if(spawn.room.controller.level >= 2)
-            Builder.spawn(s_name, 0, 2);
+            Builder.spawn(s_name, 0, 3);
         var max_energy = 0;
         var extensions: any = spawn.room.find(FIND_STRUCTURES, {
             filter: (structure) => {

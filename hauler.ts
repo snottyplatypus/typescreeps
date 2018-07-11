@@ -21,7 +21,7 @@ export namespace Hauler
         var n_haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler').length;
 
         if(n_haulers < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'hauler' + n_haulers, 
+            Game.spawns[s_name].spawnCreep(tier[t], 'hauler_' + Game.time.toString(), 
             { 
                 memory: 
                 {

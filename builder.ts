@@ -20,7 +20,7 @@ export namespace Builder
         var n_builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder').length;
 
         if(n_builders < max) {
-            Game.spawns[s_name].spawnCreep(tier[t], 'builder' + n_builders, 
+            Game.spawns[s_name].spawnCreep(tier[t], 'builder_' + Game.time.toString(), 
             { 
                 memory: 
                 {

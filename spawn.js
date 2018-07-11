@@ -29,7 +29,7 @@ var Spawn;
         if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'hauler'; }).length >= 2)
             upgrader_1.Upgrader.spawn(s_name, 0, 1);
         if (spawn.room.controller.level >= 2)
-            builder_1.Builder.spawn(s_name, 0, 2);
+            builder_1.Builder.spawn(s_name, 0, 3);
         var max_energy = 0;
         var extensions = spawn.room.find(FIND_STRUCTURES, {
             filter: function (structure) {
